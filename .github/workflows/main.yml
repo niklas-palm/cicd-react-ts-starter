@@ -8,7 +8,7 @@ permissions:
     id-token: write # This is required for requesting the JWT
     contents: read # This is required for actions/checkout
 jobs:
-    BuildBackendPipeline:
+    BuildPipeline:
         runs-on: ubuntu-latest
         steps:
             - name: checkout the repo
@@ -25,9 +25,6 @@ jobs:
                   sam build --use-container
                   sam deploy --parameter-overrides GithubRepoName=${{github.event.repository.name}}
 
-    BuildFrontendPipeline:
-        runs-on: ubuntu-latest
-        steps:
             - name: checkout the repo
               uses: actions/checkout@v3
 
@@ -54,6 +51,4 @@ jobs:
             - name: upload new frontend artifacts
               working-directory: ./frontend
               run: |
-                  ssmHostingBucketParameter="${{github.event.repository.name}}-hosting-bucket"
-                  hostingBucketName="$(aws ssm get-parameter --name ${{ssmHostingBucketParameter}})"
-                  aws s3 cp /build s3://${{hostingBucketName}}/ --recursive
+                  aws s3 cp /build s3://$(aws ssm get-parameter --name ${{github.event.repository.name}}-hosting-bucket --query "Parameter.Value")/ --recursive
