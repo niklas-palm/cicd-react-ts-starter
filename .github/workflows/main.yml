@@ -54,6 +54,6 @@ jobs:
             - name: upload new frontend artifacts
               working-directory: ./frontend
               run: |
-                  echo ssmHostingBucketParameter = '${{github.event.repository.name}}-hosting-bucket' >> $GITHUB_ENV  
-                  echo hostingBucketName = $(aws ssm get-parameter --name ${{ssmHostingBucketParameter}}) >> $GITHUB_ENV
+                  echo ssmHostingBucketParameter=${{github.event.repository.name}}-hosting-bucket
+                  echo hostingBucketName=$(aws ssm get-parameter --name ${{ssmHostingBucketParameter}})
                   aws s3 cp /build s3://${{hostingBucketName}}/ --recursive
