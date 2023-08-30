@@ -28,6 +28,7 @@ jobs:
               env:
                   REGION: ${{ env.AWS_REGION}}
                   REPO: ${{github.event.repository.name}}
+              shell: bash
               run: |
                   sam build --use-container
                   sam deploy --stack-name $(REPO)-backend \
