@@ -90,3 +90,7 @@ Resources:
             Name: !Sub '${GithubRepoName}-hosting-bucket'
             Type: 'String' # Required
             Value: !Ref HostingBucket # Required
+
+Outputs:
+    DomainUrlCloudfront:
+        Value: !GetAtt cloudfrontDistribution.DomainName
