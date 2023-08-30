@@ -4,6 +4,7 @@ on:
     push:
         paths:
             - backend/**
+            - .github/workflows/backend.yml
 env:
     AWS_REGION: 'eu-west-1'
 # permission can be added at job level or workflow level
