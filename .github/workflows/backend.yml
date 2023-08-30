@@ -25,6 +25,14 @@ jobs:
 
             - name: sam build
               working-directory: ./backend
+              env:
+                  REGION: ${{ env.AWS_REGION}}
+                  REPO: ${{github.event.repository.name}}
               run: |
                   sam build --use-container
-                  sam deploy --parameter-overrides GithubRepoName=${{github.event.repository.name}}
+                  sam deploy --stack-name $(REPO)-backend \
+                    --parameter-overrides GithubRepoName=$(REPO) \
+                    --resolve-s3 \
+                    --region $(REGION) \
+                    --no-fail-on-empty-changeset \
+                    --tags project=$(REPO)
