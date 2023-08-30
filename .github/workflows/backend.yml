@@ -1,0 +1,30 @@
+# Sample workflow to access AWS resources when workflow is tied to branch
+name: Backend workflow
+on:
+    push:
+        paths:
+            - backend/**
+env:
+    AWS_REGION: 'eu-west-1'
+# permission can be added at job level or workflow level
+permissions:
+    id-token: write # This is required for requesting the JWT
+    contents: read # This is required for actions/checkout
+jobs:
+    BuildPipeline:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout the repo
+              uses: actions/checkout@v3
+
+            - name: configure aws credentials
+              uses: aws-actions/configure-aws-credentials@v3
+              with:
+                  role-to-assume: arn:aws:iam::803033771544:role/github-oidc-role-to-assume # Instructions: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: sam build
+              working-directory: ./backend
+              run: |
+                  sam build --use-container
+                  sam deploy --parameter-overrides GithubRepoName=${{github.event.repository.name}}
