@@ -13,6 +13,9 @@ permissions:
     contents: read # This is required for actions/checkout
 jobs:
     BuildPipeline:
+        defaults:
+            run:
+                working-directory: ./frontend
         runs-on: ubuntu-latest
         steps:
             - name: checkout the repo
@@ -30,16 +33,13 @@ jobs:
                   node-version: '18'
 
             - name: install node dependencies
-              working-directory: ./frontend
               run: |
                   npm install
 
             - name: build frontend
-              working-directory: ./frontend
               run: |
                   npm run build
 
             - name: upload new frontend artifacts
-              working-directory: ./frontend
               run: |
                   aws s3 cp ./build s3://$(aws ssm get-parameter --name ${{github.event.repository.name}}-hosting-bucket --query "Parameter.Value" --output text)/ --recursive

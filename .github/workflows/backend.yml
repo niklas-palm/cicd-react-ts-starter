@@ -5,6 +5,7 @@ on:
         paths:
             - backend/**
             - .github/workflows/backend.yml
+
 env:
     AWS_REGION: 'eu-west-1'
     REPO: ${{github.event.repository.name}}
@@ -14,6 +15,9 @@ permissions:
     contents: read # This is required for actions/checkout
 jobs:
     BuildPipeline:
+        defaults:
+            run:
+                working-directory: ./backend
         runs-on: ubuntu-latest
         steps:
             - name: checkout the repo
@@ -26,7 +30,6 @@ jobs:
                   aws-region: ${{ env.AWS_REGION }}
 
             - name: sam build
-              working-directory: ./backend
               run: |
                   sam build --use-container
                   sam deploy --stack-name ${{env.REPO}}-backend \
