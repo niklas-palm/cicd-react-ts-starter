@@ -1,14 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-    backend
-
-    SAM Template for backend
+    SAM Template for the backend
 
 Parameters:
     GithubRepoName:
         Type: String
-        Description: 'Name of the GitHub repo where the project is stored.'
+        Description: Name of the GitHub repo where the project is stored.
 
 Resources:
     ### STATIC HOSTING
@@ -26,7 +24,7 @@ Resources:
             CloudFrontOriginAccessIdentityConfig:
                 Comment: !Ref HostingBucket
 
-    # Bucket policy that allows the aboe OAI to access the buvket.
+    # Bucket policy that allows the aboe OAI to access the bucket.
     HostingBucketPolicy:
         Type: AWS::S3::BucketPolicy
         Properties:
@@ -48,7 +46,7 @@ Resources:
                               - - 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity '
                                 - !Ref CloudFrontOriginAccessIdentity
 
-    # CDN to front and cache website
+    # CDN to front and cache the website
     cloudfrontDistribution:
         Type: AWS::CloudFront::Distribution
         Properties:
@@ -71,7 +69,7 @@ Resources:
                         Cookies:
                             Forward: none
                         QueryString: false
-                    TargetOriginId: s3origin # Unsure what this does, but required property
+                    TargetOriginId: s3origin # Required
                 DefaultRootObject: index.html
                 Enabled: true
                 HttpVersion: http2
@@ -88,9 +86,10 @@ Resources:
         Properties:
             Description: 'Hosting bucket name'
             Name: !Sub '${GithubRepoName}-hosting-bucket'
-            Type: 'String' # Required
+            Type: String # Required
             Value: !Ref HostingBucket # Required
 
 Outputs:
     DomainUrlCloudfront:
         Value: !GetAtt cloudfrontDistribution.DomainName
+        Description: 'Cloudfront distribution URL.'
