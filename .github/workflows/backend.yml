@@ -7,6 +7,7 @@ on:
             - .github/workflows/backend.yml
 env:
     AWS_REGION: 'eu-west-1'
+    REPO: ${{github.event.repository.name}}
 # permission can be added at job level or workflow level
 permissions:
     id-token: write # This is required for requesting the JWT
@@ -26,15 +27,11 @@ jobs:
 
             - name: sam build
               working-directory: ./backend
-              env:
-                  REGION: ${{ env.AWS_REGION}}
-                  REPO: ${{github.event.repository.name}}
-              shell: bash
               run: |
                   sam build --use-container
-                  sam deploy --stack-name $(REPO)-backend \
-                    --parameter-overrides GithubRepoName=$(REPO) \
+                  sam deploy --stack-name ${{env.REPO}}-backend \
+                    --parameter-overrides GithubRepoName=${{env.REPO}} \
                     --resolve-s3 \
-                    --region $(REGION) \
+                    --region ${{ env.AWS_REGION}} \
                     --no-fail-on-empty-changeset \
-                    --tags project=$(REPO)
+                    --tags project=${{env.REPO}}
