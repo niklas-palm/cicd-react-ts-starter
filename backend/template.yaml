@@ -47,7 +47,7 @@ Resources:
                   - !Ref CloudFrontOriginAccessIdentity
 
   # CDN to front and cache the website
-  cloudfrontDistribution:
+  CloudfrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
@@ -81,7 +81,7 @@ Resources:
               OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
         IPV6Enabled: false
 
-  bucketNameParameter:
+  BucketNameParameter:
     Type: AWS::SSM::Parameter
     Properties:
       Description: 'Hosting bucket name'
@@ -91,5 +91,9 @@ Resources:
 
 Outputs:
   DomainUrlCloudfront:
-    Value: !GetAtt cloudfrontDistribution.DomainName
-    Description: 'Cloudfront distribution URL.'
+    Value: !GetAtt CloudfrontDistribution.DomainName
+    Description: Cloudfront distribution URL.
+
+  BucketNameParameter:
+    Value: !Ref BucketNameParameter
+    Description: Name of the SSM paramter containing the S3 hosting bucket name.
