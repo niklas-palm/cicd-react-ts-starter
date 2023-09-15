@@ -6,6 +6,7 @@ Neat React starter with TypeScript and Github Actions. Sets up hosting using Ama
 
 - [OIDC set up between Github and your AWS account](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
 - Manually set the OIDC_ROLE environment variable in `.github/workflows/backend.yml` and `.github/workflows/backend.yml` to the role created using the tutorial above.
+- [Install AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
 
 ### How to deploy the project manually (without pushing a commit triggering Github Workflows)
 
