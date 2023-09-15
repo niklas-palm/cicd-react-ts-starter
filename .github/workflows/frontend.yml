@@ -6,7 +6,7 @@ on:
       - .github/workflows/frontend.yml
 env:
   AWS_REGION: 'eu-west-1' # Select this to suit where you'd like to deploy your workload
-  OIDC_ROLE: arn:aws:iam::803033771544:role/github-oidc-role-to-assume # CHANGE THIS and configure according to these instructions: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+  OIDC_ROLE: YOUR_GITHUB_OICD_ROLE_ARN # CHANGE THIS and configure according to these instructions: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
